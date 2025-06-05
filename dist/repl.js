@@ -1,21 +1,47 @@
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline";
-const rl = createInterface({
-    input: stdin,
-    output: stdout,
-    prompt: "Pokedex",
-});
+import { commandExit } from "./command_exit.js";
+import { helpCommand } from "./command_help.js";
+export function getCommands() {
+    return {
+        exit: {
+            name: "exit",
+            description: "Exits the pokedex",
+            callback: commandExit,
+        },
+        help: {
+            name: "help",
+            description: "PDisplays a help message",
+            callback: helpCommand,
+        },
+    };
+}
 export function startREPL() {
-    console.log("Pokedex > ");
-    rl.on("line", (line) => {
-        let prompt = rl.getPrompt();
-        const cleanedPrompt = cleanInput(line);
+    const rl = createInterface({
+        input: stdin,
+        output: stdout,
+        prompt: "Pokedex > ",
+    });
+    rl.prompt();
+    rl.on("line", async (input) => {
+        const cleanedPrompt = cleanInput(input);
         if (cleanedPrompt.length === 0) {
             rl.getPrompt();
+            return;
+        }
+        // const commandName = cleanedPrompt[0];
+        // console.log(`Your command was ${commandName}`);
+        const userCommand = cleanedPrompt[0];
+        console.log("User command: ", userCommand);
+        if (getCommands()[userCommand]) {
+            console.log("found command");
+            const executeCommand = getCommands()[userCommand].callback;
+            executeCommand(getCommands());
         }
         else {
-            console.log("Your command was:", cleanedPrompt[0]);
+            console.log("Unknown command");
         }
+        rl.getPrompt();
     });
 }
 export function cleanInput(input) {
