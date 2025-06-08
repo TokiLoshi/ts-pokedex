@@ -1,5 +1,4 @@
-import { exit } from "node:process";
-export function commandExit() {
+export async function commandExit(state) {
     console.log("Closing the Pokedex... Goodbye!");
-    exit(0);
+    state.readlineInterface.close();
 }

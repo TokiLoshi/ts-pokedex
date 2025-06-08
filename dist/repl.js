@@ -1,7 +1,7 @@
-import { stdin, stdout } from "node:process";
-import { createInterface } from "node:readline";
 import { commandExit } from "./command_exit.js";
 import { helpCommand } from "./command_help.js";
+import { getMap } from "./command_map.js";
+import { goBack } from "./command_map_back.js";
 export function getCommands() {
     return {
         exit: {
@@ -11,22 +11,27 @@ export function getCommands() {
         },
         help: {
             name: "help",
-            description: "PDisplays a help message",
+            description: "Displays a help message",
             callback: helpCommand,
+        },
+        map: {
+            name: "map",
+            description: "Displays names of 20 locations in Pokemon world",
+            callback: getMap,
+        },
+        mapb: {
+            name: "mapb",
+            description: "Displays names of the last 20 locations in Pokemon world",
+            callback: goBack,
         },
     };
 }
-export function startREPL() {
-    const rl = createInterface({
-        input: stdin,
-        output: stdout,
-        prompt: "Pokedex > ",
-    });
-    rl.prompt();
-    rl.on("line", async (input) => {
+export async function startREPL(state) {
+    state.readlineInterface.prompt();
+    state.readlineInterface.on("line", async (input) => {
         const cleanedPrompt = cleanInput(input);
         if (cleanedPrompt.length === 0) {
-            rl.getPrompt();
+            state.readlineInterface.getPrompt();
             return;
         }
         // const commandName = cleanedPrompt[0];
@@ -34,14 +39,15 @@ export function startREPL() {
         const userCommand = cleanedPrompt[0];
         console.log("User command: ", userCommand);
         if (getCommands()[userCommand]) {
-            console.log("found command");
-            const executeCommand = getCommands()[userCommand].callback;
-            executeCommand(getCommands());
+            // const executeCommand = getCommands()[userCommand].callback;
+            // executeCommand(getCommands());
+            const executeCommand = state.commandRegistry[userCommand].callback;
+            executeCommand(state);
         }
         else {
             console.log("Unknown command");
         }
-        rl.getPrompt();
+        state.readlineInterface.getPrompt();
     });
 }
 export function cleanInput(input) {
