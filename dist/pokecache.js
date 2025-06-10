@@ -1,7 +1,3 @@
-// Create a cache entry Type T to hold objects with the following properties:
-// CacheEntry<T>
-// createAt number for Date.now
-// val - T generic representing object we're cache
 export class Cache {
     #cache = new Map();
     #reapIntervalId = undefined;
@@ -11,33 +7,29 @@ export class Cache {
         this.#startReapLoop();
     }
     add(key, val) {
-        this.#cache.set(key, {
+        const entry = {
             createdAt: Date.now(),
             val: val,
-        });
+        };
+        this.#cache.set(key, entry);
     }
     get(key) {
-        const result = this.#cache.get(key);
-        if (!result) {
-            return undefined;
+        const entry = this.#cache.get(key);
+        if (entry !== undefined) {
+            return entry.val;
         }
-        return result;
+        return undefined;
+    }
+    #startReapLoop() {
+        this.#reapIntervalId = setInterval(this.#reap.bind(this), this.#interval);
     }
     #reap() {
-        // Loop through the cache
-        // If the entry is older than Date.now() - this.#interval
-        const cutoffTime = Date.now() - this.#interval;
+        const now = Date.now();
         for (const [key, entry] of this.#cache) {
-            if (cutoffTime > entry.createdAt) {
+            if (now - entry.createdAt > this.#interval) {
                 this.#cache.delete(key);
             }
         }
-    }
-    #startReapLoop() {
-        // use setInterval to call #this.reap() after a delay of this.#interval
-        // stor interval ID in this.
-        const id = setInterval(this.#reap.bind(this), this.#interval);
-        this.#reapIntervalId = id;
     }
     stopReapLoop() {
         // use clearInterval to stop the reap loop

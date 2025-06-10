@@ -2,6 +2,7 @@ import { commandExit } from "./command_exit.js";
 import { helpCommand } from "./command_help.js";
 import { getMap } from "./command_map.js";
 import { goBack } from "./command_map_back.js";
+import { explore } from "./command_explore.js";
 export function getCommands() {
     return {
         exit: {
@@ -24,14 +25,19 @@ export function getCommands() {
             description: "Displays names of the last 20 locations in Pokemon world",
             callback: goBack,
         },
+        explore: {
+            name: "explore",
+            description: "Displays names of poke",
+            callback: explore,
+        },
     };
 }
 export async function startREPL(state) {
-    state.readlineInterface.prompt();
-    state.readlineInterface.on("line", async (input) => {
+    state.readline.prompt();
+    state.readline.on("line", async (input) => {
         const cleanedPrompt = cleanInput(input);
         if (cleanedPrompt.length === 0) {
-            state.readlineInterface.getPrompt();
+            state.readline.getPrompt();
             return;
         }
         // const commandName = cleanedPrompt[0];
@@ -47,7 +53,7 @@ export async function startREPL(state) {
         else {
             console.log("Unknown command");
         }
-        state.readlineInterface.getPrompt();
+        state.readline.getPrompt();
     });
 }
 export function cleanInput(input) {

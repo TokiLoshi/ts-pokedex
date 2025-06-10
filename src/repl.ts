@@ -38,12 +38,12 @@ export function getCommands(): Record<string, CLICommand> {
 }
 
 export async function startREPL(state: State): Promise<void> {
-	state.readlineInterface.prompt();
+	state.readline.prompt();
 
-	state.readlineInterface.on("line", async (input) => {
+	state.readline.on("line", async (input) => {
 		const cleanedPrompt = cleanInput(input);
 		if (cleanedPrompt.length === 0) {
-			state.readlineInterface.getPrompt();
+			state.readline.getPrompt();
 			return;
 		}
 		// const commandName = cleanedPrompt[0];
@@ -59,7 +59,7 @@ export async function startREPL(state: State): Promise<void> {
 			console.log("Unknown command");
 		}
 
-		state.readlineInterface.getPrompt();
+		state.readline.getPrompt();
 	});
 }
 

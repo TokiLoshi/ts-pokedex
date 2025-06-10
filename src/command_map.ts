@@ -2,25 +2,26 @@ import { PokeAPI } from "./pokeapi.js";
 import { State } from "./state.js";
 
 export async function getMap(state: State) {
-	// returns 20 location areas
-	// Use Poke api
-	let nextLocation = state.nextLocationsURL;
+	let nextLocation = state.nextLocationURL;
 
 	if (nextLocation !== null) {
-		const response = await state.pokeAPI.fetchLocations(nextLocation);
-		const allResults = response;
-		let next = null;
-		let prev = null;
+		const locations = await state.pokeAPI.fetchLocations(state.nextLocationURL);
+		state.nextLocationURL = locations.next;
+
+		const allResults = locations;
+		let next = "";
+		let prev = "";
+
 		if (allResults.next) {
 			next = allResults.next;
 		}
 		if (allResults.previous) {
 			prev = allResults.previous;
 		}
-		state.prevLocationsURL = prev;
+		state.prevLocationURL = prev;
 		for (let location of allResults.results) {
 			console.log(location.name);
 		}
-		state.nextLocationsURL = next;
+		state.nextLocationURL = next;
 	}
 }

@@ -4,11 +4,11 @@ import { getCommands } from "./repl.js";
 import { PokeAPI } from "./pokeapi.js";
 
 export type State = {
-	readlineInterface: Interface;
+	readline: Interface;
 	commandRegistry: Record<string, CLICommand>;
 	pokeAPI: PokeAPI;
-	nextLocationsURL: string | null;
-	prevLocationsURL: string | null;
+	nextLocationURL: string;
+	prevLocationURL: string;
 };
 
 export type CLICommand = {
@@ -17,20 +17,19 @@ export type CLICommand = {
 	callback: (state: State) => Promise<void>;
 };
 
-export function initState() {
-	const newState = {
-		readlineInterface: createInterface({
-			input: stdin,
-			output: stdout,
-			prompt: "Pokedex > ",
-		}),
+export function initState(cacheInterval: number) {
+	const rl = createInterface({
+		input: process.stdin,
+		output: process.stdout,
+		prompt: "Pokedex > ",
+	});
+	return {
+		readline: rl,
 		commandRegistry: getCommands(),
-		pokeAPI: new PokeAPI(),
-		nextLocationsURL: "location-area/",
-		prevLocationsURL: null,
+		pokeAPI: new PokeAPI(cacheInterval),
+		nextLocationURL: "",
+		prevLocationURL: "",
 	};
-
-	return newState;
 }
 
 // Update state to contain PokeAPI object
