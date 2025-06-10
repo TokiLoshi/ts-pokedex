@@ -5,6 +5,7 @@ import { helpCommand } from "./command_help.js";
 import { State, CLICommand } from "./state.js";
 import { getMap } from "./command_map.js";
 import { goBack } from "./command_map_back.js";
+import { explore } from "./command_explore.js";
 
 export function getCommands(): Record<string, CLICommand> {
 	return {
@@ -27,6 +28,11 @@ export function getCommands(): Record<string, CLICommand> {
 			name: "mapb",
 			description: "Displays names of the last 20 locations in Pokemon world",
 			callback: goBack,
+		},
+		explore: {
+			name: "explore",
+			description: "Displays names of poke",
+			callback: explore,
 		},
 	};
 }
