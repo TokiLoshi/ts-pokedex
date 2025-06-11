@@ -43,23 +43,25 @@ export async function startREPL(state: State): Promise<void> {
 	state.readline.on("line", async (input) => {
 		const cleanedPrompt = cleanInput(input);
 		if (cleanedPrompt.length === 0) {
-			state.readline.getPrompt();
+			state.readline.prompt();
 			return;
 		}
 		// const commandName = cleanedPrompt[0];
 		// console.log(`Your command was ${commandName}`);
-		const userCommand = cleanedPrompt[0];
+		const userCommand = cleanedPrompt.slice(1);
 		console.log("User command: ", userCommand);
-		if (getCommands()[userCommand]) {
+
+		// if (getCommands()[userCommand]) {
+		if (state.commandRegistry[userCommand]) {
 			// const executeCommand = getCommands()[userCommand].callback;
 			// executeCommand(getCommands());
 			const executeCommand = state.commandRegistry[userCommand].callback;
-			executeCommand(state);
+			executeCommand(state, ...args);
 		} else {
 			console.log("Unknown command");
 		}
 
-		state.readline.getPrompt();
+		state.readline.prompt();
 	});
 }
 
