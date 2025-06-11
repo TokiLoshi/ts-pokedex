@@ -14,9 +14,8 @@ export async function explore(state, ...args) {
             throw new Error(`Response status: ${response.status}`);
         }
         const json = await response.json();
-        console.log("Json: ", json);
-        for (let pokemon in json) {
-            console.log(pokemon);
+        for (let pokemon of json.pokemon_encounters) {
+            console.log(`-${pokemon.pokemon.name}`);
         }
     }
     catch (error) {

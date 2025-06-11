@@ -1,5 +1,5 @@
 import { State } from "./state.js";
-import { PokeAPI, Result } from "./pokeapi.js";
+import { PokeAPI, Location } from "./pokeapi.js";
 
 export async function explore(state: State, ...args: string[]) {
 	// if pokemon
@@ -13,14 +13,10 @@ export async function explore(state: State, ...args: string[]) {
 
 	// https://pokeapi.co/api/v2/location-area/pastoria-city-area
 	try {
-		const response = await fetch(url);
-		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
-		}
-		const json: Result = await response.json();
-		console.log("Json: ", json);
-		for (let pokemon in json) {
-			console.log(pokemon);
+		const response = await state.pokeAPI.fetchLocation(name);
+
+		for (let pokemon of response.pokemon_encounters) {
+			console.log(`-${pokemon.pokemon.name}`);
 		}
 	} catch (error) {
 		console.error(error);
