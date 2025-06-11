@@ -1,18 +1,14 @@
 export async function goBack(state) {
+    console.log("Previous locations: ", state.prevLocationURL);
+    if (!state.prevLocationURL) {
+        console.log("No previous location, you're on the first page");
+        return;
+    }
     let prevLocation = state.prevLocationURL;
-    if (prevLocation !== null) {
-        const response = await state.pokeAPI.fetchLocations(prevLocation);
-        const allResults = response;
-        let last = "";
-        let next = "";
-        if (allResults.previous) {
-            state.prevLocationURL = allResults.previous;
-        }
-        if (allResults.next) {
-            state.nextLocationURL = next;
-        }
-        for (let location of allResults.results) {
-            console.log(location.name);
-        }
+    const locations = await state.pokeAPI.fetchLocations(prevLocation);
+    state.nextLocationURL = locations.next;
+    state.prevLocationURL = locations.previous;
+    for (const location of locations.results) {
+        console.log(location.name);
     }
 }

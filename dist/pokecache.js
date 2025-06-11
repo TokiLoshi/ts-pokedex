@@ -2,26 +2,28 @@ export class Cache {
     #cache = new Map();
     #reapIntervalId = undefined;
     #interval;
-    constructor(timeoutval) {
-        this.#interval = timeoutval;
+    constructor(interval) {
+        this.#interval = interval;
         this.#startReapLoop();
     }
-    add(key, val) {
+    add(key, value) {
         const entry = {
             createdAt: Date.now(),
-            val: val,
+            value: value,
         };
         this.#cache.set(key, entry);
     }
     get(key) {
         const entry = this.#cache.get(key);
         if (entry !== undefined) {
-            return entry.val;
+            return entry.value;
         }
         return undefined;
     }
     #startReapLoop() {
-        this.#reapIntervalId = setInterval(this.#reap.bind(this), this.#interval);
+        this.#reapIntervalId = setInterval(() => {
+            this.#reap();
+        }, this.#interval);
     }
     #reap() {
         const now = Date.now();
@@ -33,8 +35,10 @@ export class Cache {
     }
     stopReapLoop() {
         // use clearInterval to stop the reap loop
-        clearInterval(this.#reapIntervalId);
+        if (this.#reapIntervalId) {
+            clearInterval(this.#reapIntervalId);
+            this.#reapIntervalId = undefined;
+        }
         // set this.#reapIntervalId back to undefined
-        this.#reapIntervalId = undefined;
     }
 }

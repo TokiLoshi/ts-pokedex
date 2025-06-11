@@ -1,7 +1,7 @@
 import { Cache } from "./pokecache.js";
 export class PokeAPI {
     static baseURL = "https://pokeapi.co/api/v2";
-    cache = new Cache(10);
+    cache;
     constructor(cacheInterval) {
         this.cache = new Cache(cacheInterval);
     }
@@ -42,6 +42,7 @@ export class PokeAPI {
             }
             const location = await response.json();
             console.log("Location:", location);
+            this.cache.add(url, location);
             return location;
         }
         catch (error) {
