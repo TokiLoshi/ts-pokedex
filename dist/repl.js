@@ -5,6 +5,7 @@ import { goBack } from "./command_map_back.js";
 import { explore } from "./command_explore.js";
 import { catchCommand } from "./command_catch.js";
 import { inspectCommand } from "./command_inspect.js";
+import { showPokedex } from "./command_pokedex.js";
 export function getCommands() {
     return {
         exit: {
@@ -41,6 +42,11 @@ export function getCommands() {
             name: "inspect",
             description: "Inspects a pokemon",
             callback: inspectCommand,
+        },
+        pokedex: {
+            name: "pokedex",
+            description: "Prints out pokedex",
+            callback: showPokedex,
         },
     };
 }

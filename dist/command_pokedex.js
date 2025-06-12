@@ -1,0 +1,7 @@
+export async function showPokedex(state) {
+    const pokedex = state.pokedex;
+    console.log("Your pokedex: ");
+    for (const pokemon in pokedex) {
+        console.log(`- ${pokedex[pokemon].name}`);
+    }
+}
