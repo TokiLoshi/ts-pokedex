@@ -1,8 +1,7 @@
 import { createInterface, type Interface } from "readline";
 import { stdin, stdout } from "node:process";
 import { getCommands } from "./repl.js";
-import { PokeAPI } from "./pokeapi.js";
-import { Pokemon } from "./command_catch.js";
+import { PokeAPI, Pokemon } from "./pokeapi.js";
 
 export type State = {
 	readline: Interface;

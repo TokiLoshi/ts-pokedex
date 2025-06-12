@@ -1,5 +1,5 @@
 import { State } from "./state.js";
-import { PokeAPI, Result } from "./pokeapi.js";
+import { PokeAPI, Result, Pokemon } from "./pokeapi.js";
 
 export async function catchCommand(state: State, ...args: string[]) {
 	if (args.length !== 1) {
@@ -30,8 +30,7 @@ export async function catchCommand(state: State, ...args: string[]) {
 				id: result.id,
 				name: name,
 			};
-			state.pokedex[name] = pokemondata;
-			console.log("inspecting: ", state.pokedex[name]);
+			state.pokedex[name] = result;
 		} else {
 			console.log(`${name} escaped`);
 		}
@@ -40,9 +39,3 @@ export async function catchCommand(state: State, ...args: string[]) {
 		throw error;
 	}
 }
-
-export type Pokemon = {
-	base_experience: number;
-	id: number;
-	name: string;
-};
