@@ -1,0 +1,10 @@
+
+> ts-pokedex@1.0.0 dev
+> npx tsc && node dist/main.js
+
+Pokedex > NAME:  squirtle
+Throwing a Pokeball at squirtle...
+BaseXP:  63
+User's chance:  98
+You caught squirtle
+Pokedex > Closing the Pokedex... Goodbye!

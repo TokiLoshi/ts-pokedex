@@ -3,6 +3,7 @@ import { helpCommand } from "./command_help.js";
 import { getMap } from "./command_map.js";
 import { goBack } from "./command_map_back.js";
 import { explore } from "./command_explore.js";
+import { catchCommand } from "./command_catch.js";
 export function getCommands() {
     return {
         exit: {
@@ -29,6 +30,11 @@ export function getCommands() {
             name: "explore",
             description: "Displays names of poke",
             callback: explore,
+        },
+        catch: {
+            name: "catch",
+            description: "Catches a pokemon",
+            callback: catchCommand,
         },
     };
 }

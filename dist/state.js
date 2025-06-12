@@ -13,6 +13,6 @@ export function initState(cacheInterval) {
         pokeAPI: new PokeAPI(cacheInterval),
         nextLocationURL: "",
         prevLocationURL: "",
+        pokedex: {},
     };
 }
-// Update state to contain PokeAPI object
